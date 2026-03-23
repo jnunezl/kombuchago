@@ -7,7 +7,11 @@ let wakeLock = null;
 function renderIcon(iconKey) {
   const key  = iconKey || 'kombucha';
   const icon = ICONS[key] || ICONS['kombucha'];
-  document.getElementById('icon-container').innerHTML = icon.svg;
+  const container = document.getElementById('icon-container');
+  container.textContent = '';
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(icon.svg, 'image/svg+xml');
+  container.appendChild(document.adoptNode(svgDoc.documentElement));
 }
 
 api.storage.local.get(['settings']).then(r => {

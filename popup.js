@@ -67,9 +67,15 @@ Object.entries(ICONS).forEach(([key, def]) => {
   btn.className   = 'icon-opt';
   btn.dataset.key = key;
   btn.title       = def.label;
-  btn.innerHTML   = `${def.svg}<span>${def.label}</span>`;
-  const svg = btn.querySelector('svg');
-  if (svg) { svg.setAttribute('width', '16'); svg.setAttribute('height', '16'); }
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(def.svg, 'image/svg+xml');
+  const svgEl  = svgDoc.documentElement;
+  svgEl.setAttribute('width', '16');
+  svgEl.setAttribute('height', '16');
+  btn.appendChild(document.adoptNode(svgEl));
+  const span = document.createElement('span');
+  span.textContent = def.label;
+  btn.appendChild(span);
   iconGrid.appendChild(btn);
 });
 
